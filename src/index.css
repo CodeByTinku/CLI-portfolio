@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-fira: 'Fira Code', monospace;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
+/* Custom CSS reset & Scrollbar styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-outfit);
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Multi-theme variables mapping */
+:root {
+  /* Default Dracula Theme */
+  --bg-color: #1e1e2e;
+  --panel-bg: rgba(30, 30, 46, 0.7);
+  --text-primary: #cdd6f4;
+  --text-secondary: #a6adc8;
+  --primary-color: #cba6f7; /* Violet */
+  --secondary-color: #89b4fa; /* Blue */
+  --accent-color: #f38ba8; /* Red/Pink */
+  --success-color: #a6e3a1; /* Green */
+  --glow-shadow: 0 0 15px rgba(203, 166, 247, 0.4);
+  --border-color: rgba(203, 166, 247, 0.25);
+  --selection-bg: rgba(203, 166, 247, 0.2);
+}
+
+[data-theme="cyberpunk"] {
+  --bg-color: #0b0c10;
+  --panel-bg: rgba(11, 12, 16, 0.75);
+  --text-primary: #c5c6c7;
+  --text-secondary: #86c232;
+  --primary-color: #66fcf1; /* Cyan */
+  --secondary-color: #45a29e; /* Dark Cyan */
+  --accent-color: #ff007f; /* Hot Pink */
+  --success-color: #39ff14; /* Neon Green */
+  --glow-shadow: 0 0 20px rgba(102, 252, 241, 0.6), 0 0 10px rgba(255, 0, 127, 0.4);
+  --border-color: rgba(102, 252, 241, 0.3);
+  --selection-bg: rgba(102, 252, 241, 0.25);
+}
+
+[data-theme="matrix"] {
+  --bg-color: #000000;
+  --panel-bg: rgba(0, 0, 0, 0.85);
+  --text-primary: #00ff41; /* Hacker Green */
+  --text-secondary: #008f11;
+  --primary-color: #00ff41;
+  --secondary-color: #003b00;
+  --accent-color: #ffffff;
+  --success-color: #00ff41;
+  --glow-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
+  --border-color: rgba(0, 255, 65, 0.4);
+  --selection-bg: rgba(0, 255, 65, 0.3);
+}
+
+[data-theme="retro"] {
+  --bg-color: #1a0f00; /* Amber PC dark */
+  --panel-bg: rgba(26, 15, 0, 0.8);
+  --text-primary: #ffb000; /* Classic Amber phosphor */
+  --text-secondary: #aa7500;
+  --primary-color: #ffb000;
+  --secondary-color: #331f00;
+  --accent-color: #ffd000;
+  --success-color: #ffb000;
+  --glow-shadow: 0 0 15px rgba(255, 176, 0, 0.5);
+  --border-color: rgba(255, 176, 0, 0.35);
+  --selection-bg: rgba(255, 176, 0, 0.2);
+}
+
+/* Beautiful Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+  box-shadow: var(--glow-shadow);
+}
+
+/* Custom Font classes */
+.font-fira {
+  font-family: var(--font-fira), monospace;
+}
+
+.font-outfit {
+  font-family: var(--font-outfit), sans-serif;
+}
+
+/* CRT Screen Scanline & Grid Effect for cyber/retro/matrix theme */
+.crt-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 999;
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
+
+[data-theme="retro"] .crt-overlay::after,
+[data-theme="matrix"] .crt-overlay::after,
+[data-theme="cyberpunk"] .crt-overlay::after {
+  animation: flicker 0.15s infinite;
+}
+
+/* Flicker animation for retro feel */
+@keyframes flicker {
+  0% { opacity: 0.98; }
+  50% { opacity: 1; }
+  100% { opacity: 0.99; }
+}
+
+/* Glowing Neon Borders */
+.glow-border {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--glow-shadow);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glow-border:hover {
+  border-color: var(--primary-color);
+}
+
+/* Glow Text */
+.glow-text {
+  text-shadow: 0 0 5px var(--primary-color), 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Retro Matrix/Terminal green rain simulation background */
+.matrix-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.06;
+}
+
+/* Blinking terminal cursor */
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background-color: var(--primary-color);
+  margin-left: 4px;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  from, to { background-color: transparent }
+  50% { background-color: var(--primary-color); }
+}
+
+/* Cyberpunk grid bg for cyberpunk theme */
+.cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(102, 252, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
+}
+
+/* Glassmorphism main panel wrapper */
+.glass-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
