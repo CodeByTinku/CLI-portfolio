@@ -3,9 +3,10 @@ import { useState, useCallback, useRef } from 'react';
 // Core projects data
 const PROJECTS_DATA = [
   { name: "Game Explorer", desc: "A modern game discovery React app utilizing RAWG API with trivia quiz.", link: "https://game-explorer-pink.vercel.app/", tags: ["React", "TailwindCSS", "Framer Motion", "Axios"] },
-  { name: "Anime Tracker", desc: "Interactive media journal to manage watched series and releases.", link: "#", tags: ["React", "Zustand", "TailwindCSS"] },
-  { name: "DevPulse Portfolio", desc: "This CLI interactive hacker terminal dashboard app.", link: "#", tags: ["React", "HTML5 Canvas", "Recharts", "Framer Motion"] },
-  { name: "Retro Chat", desc: "A real-time socket-based web chat application with nostalgic pixel-art styles.", link: "#", tags: ["Socket.io", "Express", "React"] }
+  { name: "Anime Explorer", desc: "A React app to discover anime and manage your personal watchlist, powered by the Jikan API.", link: "https://anime-explorer-chi.vercel.app/", tags: ["React-Router", "Axios", "Lucide-React", "TailwindCSS"] },
+  { name: "Finance Flow", desc: "A modern, interactive budgeting tool designed specifically for students and young professionals.", link: "https://finance-flow-kohl.vercel.app/", tags: ["React", "Rechart-js", "TailwindCSS", "Typescript"] },
+  { name: "Github-Visualizer", desc: "React GitHub Dashboard: Animated stats, heatmaps, badges & profile card.", link: "https://git-hub-visualizer.vercel.app/", tags: ["React", "Framer-Motion", "Axios", "Lucide-React"] },
+  
 ];
 
 // Core skills data
