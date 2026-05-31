@@ -57,7 +57,14 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **Linear Validation**: Collects Name, Email (with syntax regex validation), and Message directly inside the terminal.
 * **Serverless Pipeline**: Transmits payloads to your inbox seamlessly using **Web3Forms API** with failure alerts and success states.
 
+### 🕹️ Interactive CLI Retro Arcade Cabinet
+* **Simulated Arcade Screen**: Typing `play` or `game` seamlessly suspends standard terminal flow and initializes a fully responsive retro-themed Snake arcade cabinet environment within the left panel!
+* **High Score Persistence**: Persists your highest score records locally in the browser via **LocalStorage API**.
+* **Synthesized Audio Prompts**: Emits retro beep frequency transitions for game start boots, score acquisitions, and system crash game-over sweeps.
+* **Responsive Visual Board**: Features custom neon-glowing CSS cell rendering styled dynamically with active visual themes variables mapping (Amber in Retro, Hacker Green in Matrix, Cyan/Pink in Cyberpunk).
+
 ---
+
 
 ## 🐚 Supported Shell Commands Index
 
@@ -73,8 +80,10 @@ Typing `help` in the terminal details all supported interactive shell commands:
 | `contact` | `contact` | Initializes the multi-step interactive contact mailing assistant. |
 | `theme <val>` | `theme cyberpunk` | Switches the theme environment instantly. Options: `[dracula, cyberpunk, matrix, retro]`. |
 | `sound <val>` | `sound off` | Toggles Web Audio typing synthesizer click sounds. Options: `[on, off]`. |
+| `play` | `play` | Suspends standard shell to launch interactive Retro Snake Arcade Game. |
 | `neofetch` | `neofetch` | Outputs classic retro hardware system specs, React core, and OS status. |
 | `clear` | `clear` | Wipes the console screen buffer clean. |
+
 
 ---
 
