@@ -4,7 +4,9 @@ import TerminalInput from './components/Terminal/TerminalInput';
 import NodeTree from './components/Visualizer/NodeTree';
 import GithubStats from './components/Visualizer/GithubStats';
 import ThemeSelector from './components/ThemeSelector';
+import TerminalGame from './components/Terminal/TerminalGame';
 import { useTerminal } from './hooks/useTerminal';
+
 
 function App() {
   const [activeTheme, setActiveTheme] = useState('dracula');
@@ -28,8 +30,18 @@ function App() {
     contactFormMode, 
     contactStep, 
     handleCommand, 
-    playTypeSound 
+    playTypeSound,
+    gameActive,
+    setGameActive,
+    soundEnabled,
+    addLine
   } = useTerminal(activeTheme, setActiveTheme, handleNodeTrigger);
+
+  const handleGameExit = (finalScore) => {
+    setGameActive(false);
+    addLine(`🕹️ Exited DevPulse Arcade. Final score: ${finalScore} points.`, "system");
+  };
+
 
   // Matrix falling rain characters background loop for matrix theme
   useEffect(() => {
@@ -148,13 +160,23 @@ function App() {
           </div>
 
           {/* Core terminal histories and inputs */}
-          <TerminalHistory history={history} />
-          <TerminalInput 
-            onCommandSubmit={handleCommand} 
-            contactFormMode={contactFormMode} 
-            contactStep={contactStep}
-            playTypeSound={playTypeSound}
-          />
+          {gameActive ? (
+            <TerminalGame 
+              onExit={handleGameExit} 
+              soundEnabled={soundEnabled} 
+            />
+          ) : (
+            <>
+              <TerminalHistory history={history} />
+              <TerminalInput 
+                onCommandSubmit={handleCommand} 
+                contactFormMode={contactFormMode} 
+                contactStep={contactStep}
+                playTypeSound={playTypeSound}
+              />
+            </>
+          )}
+
         </section>
 
         {/* Right pane: Visual Dashboard GUI (2 columns in large screen) */}

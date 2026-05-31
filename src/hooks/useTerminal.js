@@ -35,6 +35,8 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
   ]);
   const [commandQueue, setCommandQueue] = useState([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [gameActive, setGameActive] = useState(false);
+
 
   // Contact form multi-step state
   const [contactForm, setContactForm] = useState({
@@ -156,9 +158,11 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("  contact     - Launches interactive input wizard to send me an email.", "normal");
         addLine("  theme <val> - Switch skins: [dracula, cyberpunk, matrix, retro]", "normal");
         addLine("  sound       - Toggle interface typing sound click [on/off]", "normal");
+        addLine("  play        - Starts the interactive CLI Retro Snake Game.", "normal");
         addLine("  clear       - Wipes the console terminal history grid.", "normal");
         addLine("  neofetch    - Retro hardware and profile spec list.", "normal");
         break;
+
 
       case 'about':
         addLine("System Bio:", "title");
@@ -222,7 +226,14 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         }
         break;
 
+      case 'play':
+      case 'game':
+        addLine("🎮 Initializing DevPulse Arcade Game Thread...", "system");
+        setGameActive(true);
+        break;
+
       case 'clear':
+
         clearHistory();
         break;
 
@@ -258,7 +269,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine(`⚠️ Command not found: '${command}'. Type 'help' for available instructions.`, "error");
     }
 
-  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled]);
+  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive]);
 
   return {
     history,
@@ -266,6 +277,9 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
     contactStep: contactForm.step,
     handleCommand,
     addLine,
-    playTypeSound
+    playTypeSound,
+    gameActive,
+    setGameActive,
+    soundEnabled
   };
 }
