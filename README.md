@@ -23,7 +23,7 @@ Built on top of **React 19**, **Tailwind CSS v4**, and **Framer Motion**, DevPul
 
 ---
 ## 
-🚀 Demo You can try **CLI-Portfolio** live here: [![Deploy with Vercel](https://vercel.com/button)]()
+🚀 Demo You can try **CLI-Portfolio** live here: [![Deploy with Vercel](https://vercel.com/button)](https://cli-portfolio-taupe-nine.vercel.app/)
 
 ## ✨ Key Features & Experience Design
 
