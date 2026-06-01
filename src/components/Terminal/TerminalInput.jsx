@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const SUGGESTED_COMMANDS = ['help', 'about', 'skills', 'projects', 'contact', 'theme', 'sound', 'clear', 'neofetch'];
+const SUGGESTED_COMMANDS = ['help', 'about', 'skills', 'projects', 'contact', 'ai', 'ask', 'theme', 'sound', 'clear', 'neofetch'];
 
-function TerminalInput({ onCommandSubmit, contactFormMode, contactStep, playTypeSound }) {
+function TerminalInput({ onCommandSubmit, contactFormMode, contactStep, aiMode, aiTyping, playTypeSound }) {
   const [value, setValue] = useState('');
   const [historyList, setHistoryList] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -20,6 +20,10 @@ function TerminalInput({ onCommandSubmit, contactFormMode, contactStep, playType
   };
 
   const handleKeyDown = (e) => {
+    if (aiTyping) {
+      e.preventDefault();
+      return;
+    }
     // 1. Enter key executes the command
     if (e.key === 'Enter') {
       const commandText = value.trim();
@@ -79,16 +83,21 @@ function TerminalInput({ onCommandSubmit, contactFormMode, contactStep, playType
   };
 
   const handleInputChange = (e) => {
+    if (aiTyping) return;
     setValue(e.target.value);
     playTypeSound();
   };
 
   // Build the prompt prefix
   const getPromptPrefix = () => {
+    if (aiTyping) return "PulseAI 🤖 [Thinking...] ➜ ";
     if (contactFormMode) {
       if (contactStep === 0) return "[Name] 👤 ➜ ";
       if (contactStep === 1) return "[Email] ✉️ ➜ ";
       if (contactStep === 2) return "[Message] 💬 ➜ ";
+    }
+    if (aiMode) {
+      return "PulseAI 🤖 ➜ ";
     }
     return "visitor@devpulse:~$ ";
   };
@@ -108,6 +117,7 @@ function TerminalInput({ onCommandSubmit, contactFormMode, contactStep, playType
           value={value}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
+          readOnly={aiTyping}
           className="absolute inset-0 w-full h-full bg-transparent text-[var(--text-primary)] border-none outline-none font-fira text-sm caret-transparent select-none z-10"
           autoComplete="off"
           autoCorrect="off"

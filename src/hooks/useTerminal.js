@@ -1,4 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
+import { getAIResponse } from '../utils/aiResponder';
+
 
 // Core projects data
 const PROJECTS_DATA = [
@@ -47,6 +49,11 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
     message: ''
   });
 
+  // PulseAI Interactive Mode State
+  const [aiMode, setAiMode] = useState(false);
+  const [aiTyping, setAiTyping] = useState(false);
+
+
   // Sound effects player
   const playTypeSound = useCallback(() => {
     if (!soundEnabled) return;
@@ -80,6 +87,37 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
     ]);
   }, []);
 
+  const simulateTyping = useCallback((text, type = "normal", speed = 10) => {
+    setAiTyping(true);
+    let currentText = "";
+    
+    // Add an empty line first
+    setHistory(prev => [...prev, { text: "", type }]);
+    
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        currentText += text[index];
+        setHistory(prev => {
+          const updated = [...prev];
+          if (updated.length > 0) {
+            updated[updated.length - 1] = { text: currentText, type };
+          }
+          return updated;
+        });
+        
+        if (soundEnabled && index % 2 === 0) {
+          playTypeSound();
+        }
+        index++;
+      } else {
+        clearInterval(interval);
+        setAiTyping(false);
+      }
+    }, speed);
+  }, [soundEnabled, playTypeSound]);
+
+
   const handleCommand = useCallback((rawInput) => {
     const input = rawInput.trim();
     if (!input) return;
@@ -87,8 +125,25 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
     // Play keystroke select click sound
     playTypeSound();
 
+    // 2. If PulseAI Interactive Chatbot Mode is ACTIVE, handle inputs via the AI responder
+    if (aiMode) {
+      addLine(`> ${input}`, "input");
+      
+      const lowerInput = input.toLowerCase().trim();
+      if (lowerInput === "exit" || lowerInput === "quit") {
+        setAiMode(false);
+        addLine("🤖 Exiting PulseAI session. Back to normal shell.", "system");
+        return;
+      }
+      
+      const response = getAIResponse(input);
+      simulateTyping(response.text, response.type);
+      return;
+    }
+
     // 1. If Contact Form Wizard is ACTIVE, handle inputs linearly rather than as terminal commands
     if (contactForm.active) {
+
       addLine(`> ${input}`, "input");
       
       if (contactForm.step === 0) { // Name step
@@ -156,6 +211,8 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("  skills      - Displays tech proficiency values visually.", "normal");
         addLine("  projects    - List active development repositories and links.", "normal");
         addLine("  contact     - Launches interactive input wizard to send me an email.", "normal");
+        addLine("  ai          - Launches interactive conversational PulseAI chatbot.", "normal");
+        addLine("  ask <query> - Instantly query PulseAI with a single natural language question.", "normal");
         addLine("  theme <val> - Switch skins: [dracula, cyberpunk, matrix, retro]", "normal");
         addLine("  sound       - Toggle interface typing sound click [on/off]", "normal");
         addLine("  play        - Starts the interactive CLI Retro Snake Game.", "normal");
@@ -164,10 +221,11 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         break;
 
 
+
       case 'about':
         addLine("System Bio:", "title");
         addLine("Hi! I'm Tinku, an aspiring full-stack learner who loves crafting visual systems.", "normal");
-        addLine("I specialize in frontend development , high-level interactive Canvas grids, and backend services.", "normal");
+        addLine("I specialize in frontend development.", "normal");
         addLine("I believe websites should not just function, they should WOW the user visually with seamless motion.", "normal");
         break;
 
@@ -193,6 +251,27 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("Type your full name to start:", "system");
         setContactForm({ active: true, step: 0, name: '', email: '', message: '' });
         break;
+
+      case 'ai':
+      case 'chat':
+      case 'pulseai':
+        addLine("🤖 PulseAI Interactive Chatbot Thread Activated!", "title");
+        addLine("Hi! I am PulseAI. How can I assist you with Tinku's portfolio workstation today?", "success");
+        addLine("Type your questions below (e.g., 'skills', 'projects', 'resume', 'secrets').", "normal");
+        addLine("Type 'exit' or 'quit' to return to standard shell.", "secondary");
+        setAiMode(true);
+        break;
+
+      case 'ask':
+        if (args.length === 0) {
+          addLine("⚠️ Usage: ask <your question here>", "error");
+        } else {
+          const query = args.join(" ");
+          const response = getAIResponse(query);
+          simulateTyping(response.text, response.type);
+        }
+        break;
+
 
       case 'theme':
         if (!args[0]) {
@@ -269,12 +348,14 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine(`⚠️ Command not found: '${command}'. Type 'help' for available instructions.`, "error");
     }
 
-  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive]);
+  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, aiMode, simulateTyping]);
 
   return {
     history,
     contactFormMode: contactForm.active,
     contactStep: contactForm.step,
+    aiMode,
+    aiTyping,
     handleCommand,
     addLine,
     playTypeSound,
@@ -282,4 +363,5 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
     setGameActive,
     soundEnabled
   };
+
 }

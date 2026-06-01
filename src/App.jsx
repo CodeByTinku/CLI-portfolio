@@ -29,6 +29,8 @@ function App() {
     history, 
     contactFormMode, 
     contactStep, 
+    aiMode,
+    aiTyping,
     handleCommand, 
     playTypeSound,
     gameActive,
@@ -36,6 +38,7 @@ function App() {
     soundEnabled,
     addLine
   } = useTerminal(activeTheme, setActiveTheme, handleNodeTrigger);
+
 
   const handleGameExit = (finalScore) => {
     setGameActive(false);
@@ -172,6 +175,8 @@ function App() {
                 onCommandSubmit={handleCommand} 
                 contactFormMode={contactFormMode} 
                 contactStep={contactStep}
+                aiMode={aiMode}
+                aiTyping={aiTyping}
                 playTypeSound={playTypeSound}
               />
             </>
