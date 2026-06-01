@@ -22,6 +22,8 @@ Built on top of **React 19**, **Tailwind CSS v4**, and **Framer Motion**, DevPul
 ![Vite](https://img.shields.io/badge/Vite-8.0.12-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
 ---
+## 
+🚀 Demo You can try **CLI-Portfolio** live here: [![Deploy with Vercel](https://vercel.com/button)](https://cli-portfolio-taupe-nine.vercel.app/)
 
 ## ✨ Key Features & Experience Design
 
