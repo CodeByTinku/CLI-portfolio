@@ -65,6 +65,13 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **Synthesized Audio Prompts**: Emits retro beep frequency transitions for game start boots, score acquisitions, and system crash game-over sweeps.
 * **Responsive Visual Board**: Features custom neon-glowing CSS cell rendering styled dynamically with active visual themes variables mapping (Amber in Retro, Hacker Green in Matrix, Cyan/Pink in Cyberpunk).
 
+### 🤖 Conversational AI Terminal Copilot (PulseAI)
+* **Interactive Sandbox Chatbot**: Typing `ai` or `chat` locks the prompt prefix into `PulseAI 🤖 ➜ `, initializing a direct conversational agent loop.
+* **Realistic Typewriter Effect**: Responses are rendered character-by-character inside the terminal buffer accompanied by synchronized keyboard oscillators sound effects.
+* **Intelligent Query Parser**: Understands natural speech requests and reveals specific answers regarding Tinku's skills, projects, age, location, and studies (Commerce stream).
+* **One-off Quick Query**: Type `ask <question>` to instantly prompt PulseAI and return a fast single answer without entering conversational loop.
+* **Blinking Loader State**: The input prompt automatically transitions to `PulseAI 🤖 [Thinking...] ➜ ` and locks keyboard input during AI sound-typist renders.
+
 ---
 
 
@@ -80,11 +87,14 @@ Typing `help` in the terminal details all supported interactive shell commands:
 | `projects` | `projects` | Renders portfolio repositories list with links, details, and stack tags. |
 | `projects --tag <val>` | `projects --tag react` | Filters and displays only projects tagged with the specified technology. |
 | `contact` | `contact` | Initializes the multi-step interactive contact mailing assistant. |
+| `ai` | `ai` | Initiates the conversational PulseAI interactive helper chatbot loop. Type `exit` to return to shell. |
+| `ask <val>` | `ask stream` | Queries PulseAI with a single natural language question (e.g., skills, stream, secrets). |
 | `theme <val>` | `theme cyberpunk` | Switches the theme environment instantly. Options: `[dracula, cyberpunk, matrix, retro]`. |
 | `sound <val>` | `sound off` | Toggles Web Audio typing synthesizer click sounds. Options: `[on, off]`. |
 | `play` | `play` | Suspends standard shell to launch interactive Retro Snake Arcade Game. |
 | `neofetch` | `neofetch` | Outputs classic retro hardware system specs, React core, and OS status. |
 | `clear` | `clear` | Wipes the console screen buffer clean. |
+
 
 
 ---
