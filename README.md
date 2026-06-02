@@ -60,9 +60,12 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **Serverless Pipeline**: Transmits payloads to your inbox seamlessly using **Web3Forms API** with failure alerts and success states.
 
 ### 🕹️ Interactive CLI Retro Arcade Cabinet
-* **Simulated Arcade Screen**: Typing `play` or `game` seamlessly suspends standard terminal flow and initializes a fully responsive retro-themed Snake arcade cabinet environment within the left panel!
-* **High Score Persistence**: Persists your highest score records locally in the browser via **LocalStorage API**.
-* **Synthesized Audio Prompts**: Emits retro beep frequency transitions for game start boots, score acquisitions, and system crash game-over sweeps.
+* **Arcade Cabinet Selection Screen**: Typing `play` or `game` seamlessly suspends standard terminal flow and initializes a beautiful retro 80s arcade selection screen with scanline backdrops, arrow-selection systems, descriptions, hotkeys, and chip-tune chimes!
+* **Two Integrated Retro Games**:
+  * 🐍 **Snake.OS**: The classic grid-based buffer overflow snake game.
+  * 👾 **DevInvaders**: A fully featured retro space defense shooter game mapping a spaceship, laser fires, descending core invaders, alien plasma pulses, level stages, and victory rewards onto the 22x14 grid!
+* **High Score Persistence**: Persists independent highest score records for both games locally in the browser via **LocalStorage API** (`devpulse_snake_highscore` & `devpulse_invaders_highscore`).
+* **Synthesized Audio Prompts**: Emits retro oscillators frequency beeps for laser fires, spaceship crashes, system reboot sweeps, and sector sanitized victory arpeggios.
 * **Responsive Visual Board**: Features custom neon-glowing CSS cell rendering styled dynamically with active visual themes variables mapping (Amber in Retro, Hacker Green in Matrix, Cyan/Pink in Cyberpunk).
 
 ### 🤖 Conversational AI Terminal Copilot (PulseAI)
@@ -91,7 +94,7 @@ Typing `help` in the terminal details all supported interactive shell commands:
 | `ask <val>` | `ask stream` | Queries PulseAI with a single natural language question (e.g., skills, stream, secrets). |
 | `theme <val>` | `theme cyberpunk` | Switches the theme environment instantly. Options: `[dracula, cyberpunk, matrix, retro]`. |
 | `sound <val>` | `sound off` | Toggles Web Audio typing synthesizer click sounds. Options: `[on, off]`. |
-| `play` | `play` | Suspends standard shell to launch interactive Retro Snake Arcade Game. |
+| `play` | `play` or `play snake` or `play invaders` | Launches the interactive Retro Arcade Cabinet select menu or boots directly into a game shortcut. |
 | `neofetch` | `neofetch` | Outputs classic retro hardware system specs, React core, and OS status. |
 | `clear` | `clear` | Wipes the console screen buffer clean. |
 
@@ -141,6 +144,9 @@ devpulse/
 ├── src/
 │   ├── components/
 │   │   ├── Terminal/
+│   │   │   ├── TerminalGame.jsx     # Master Arcade Cabinet select screen
+│   │   │   ├── SnakeGame.jsx        # Standalone Snake.OS logic component
+│   │   │   ├── DevInvaders.jsx      # Standalone DevInvaders space shooter logic
 │   │   │   ├── TerminalHistory.jsx  # Renders scrolling shell list
 │   │   │   └── TerminalInput.jsx    # Custom keyboard capture & auto-completion
 │   │   ├── Visualizer/
