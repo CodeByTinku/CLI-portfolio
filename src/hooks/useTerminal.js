@@ -215,7 +215,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("  ask <query> - Instantly query PulseAI with a single natural language question.", "normal");
         addLine("  theme <val> - Switch skins: [dracula, cyberpunk, matrix, retro]", "normal");
         addLine("  sound       - Toggle interface typing sound click [on/off]", "normal");
-        addLine("  play        - Starts the interactive CLI Retro Snake Game.", "normal");
+        addLine("  play <game> - Launches Retro Arcade. Try: 'play', 'play snake', 'play invaders'", "normal");
         addLine("  clear       - Wipes the console terminal history grid.", "normal");
         addLine("  neofetch    - Retro hardware and profile spec list.", "normal");
         break;
@@ -307,8 +307,17 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
 
       case 'play':
       case 'game':
-        addLine("🎮 Initializing DevPulse Arcade Game Thread...", "system");
-        setGameActive(true);
+        const chosenGame = args[0] ? args[0].toLowerCase() : null;
+        if (chosenGame === 'snake') {
+          addLine("🎮 Initializing Snake.OS Virtual Thread...", "system");
+          setGameActive('snake');
+        } else if (['invaders', 'space', 'shooter'].includes(chosenGame)) {
+          addLine("🎮 Initializing DevInvaders Virtual Thread...", "system");
+          setGameActive('invaders');
+        } else {
+          addLine("🎮 Initializing DevPulse Retro Arcade Cabinet Selection Thread...", "system");
+          setGameActive('menu');
+        }
         break;
 
       case 'clear':

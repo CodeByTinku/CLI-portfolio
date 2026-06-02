@@ -167,6 +167,7 @@ function App() {
             <TerminalGame 
               onExit={handleGameExit} 
               soundEnabled={soundEnabled} 
+              defaultGame={gameActive}
             />
           ) : (
             <>

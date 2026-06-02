@@ -105,10 +105,11 @@ export const getAIResponse = (query) => {
 
 
   // 7. EASTER EGGS / SYSTEM SECRETS
-  if (matches(["secrets", "easter eggs", "hacks", "game", "play", "snake"])) {
+  if (matches(["secrets", "easter eggs", "hacks", "game", "play", "snake", "invaders", "arcade"])) {
     return {
       text: "🤖 PulseAI: [CLASSIFIED INFORMATION DETECTED] 🤫\n" +
-            "• Try typing 'play' to unlock the integrated arcade cabinet Snake game!\n" +
+            "• Try typing 'play' to unlock the interactive Retro Arcade Cabinet containing Snake.OS and DevInvaders!\n" +
+            "• Try launching directly via 'play snake' or 'play invaders'!\n" +
             "• Try switching environments using 'theme cyberpunk' or 'theme matrix'.\n" +
             "• There might be secret commands like 'neofetch' waiting to be run...",
       type: "success"
