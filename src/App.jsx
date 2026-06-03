@@ -6,6 +6,7 @@ import GithubStats from './components/Visualizer/GithubStats';
 import ThemeSelector from './components/ThemeSelector';
 import TerminalGame from './components/Terminal/TerminalGame';
 import { useTerminal } from './hooks/useTerminal';
+import LofiPlayer from './components/Visualizer/LofiPlayer';
 
 
 function App() {
@@ -36,7 +37,18 @@ function App() {
     gameActive,
     setGameActive,
     soundEnabled,
-    addLine
+    addLine,
+    
+    // Audio Player states & methods
+    audioElement,
+    isPlaying,
+    currentTrack,
+    audioVolume,
+    togglePlay,
+    nextTrack,
+    prevTrack,
+    changeVolume,
+    playlist
   } = useTerminal(activeTheme, setActiveTheme, handleNodeTrigger);
 
 
@@ -153,8 +165,15 @@ function App() {
               <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-              <span className="ml-2 font-fira text-[11px] text-[var(--text-secondary)]">
+              <span className="ml-2 font-fira text-[11px] text-[var(--text-secondary)] flex items-center gap-1.5">
                 bash - tinku@workstation
+                {isPlaying && (
+                  <span className="flex items-end gap-[2px] h-2.5 ml-1" title="Lofi music playing">
+                    <span className="w-[2px] bg-[var(--primary-color)] animate-[audioWave_0.8s_ease-in-out_infinite]" style={{ animationDelay: '0.1s' }} />
+                    <span className="w-[2px] bg-[var(--primary-color)] animate-[audioWave_0.8s_ease-in-out_infinite]" style={{ animationDelay: '0.3s' }} />
+                    <span className="w-[2px] bg-[var(--primary-color)] animate-[audioWave_0.8s_ease-in-out_infinite]" style={{ animationDelay: '0.5s' }} />
+                  </span>
+                )}
               </span>
             </div>
             <span className="font-fira text-[10px] text-[var(--text-secondary)]">
@@ -193,7 +212,22 @@ function App() {
             triggerGlowCommand={triggerGlow}
           />
 
-          {/* 2. Visual Git Metrics and charts board */}
+          {/* 2. Lofi Music Station */}
+          <LofiPlayer 
+            audioElement={audioElement}
+            isPlaying={isPlaying}
+            currentTrack={currentTrack}
+            volume={audioVolume}
+            playTrack={null}
+            pauseTrack={null}
+            togglePlay={togglePlay}
+            nextTrack={nextTrack}
+            prevTrack={prevTrack}
+            setVolume={changeVolume}
+            playlist={playlist}
+          />
+
+          {/* 3. Visual Git Metrics and charts board */}
           <GithubStats />
         </section>
       </main>

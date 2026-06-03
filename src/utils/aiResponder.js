@@ -116,6 +116,17 @@ export const getAIResponse = (query) => {
     };
   }
 
+  // 7b. MUSIC / LOFI / CHILL
+  if (matches(["music", "lofi", "song", "audio", "playlist", "beat", "chill"])) {
+    return {
+      text: "🤖 PulseAI: You can control the built-in Lofi Music Station directly!\n" +
+            "• CLI Commands: Try 'music play', 'music pause', 'music list', or 'music next' / 'music prev'.\n" +
+            "• GUI Control: Use the Lofi Focus Deck widget in the right panel to visual-select tracks, toggle volume, or switch visualizer modes (Neon Wave vs. Retro ASCII Grid)!\n" +
+            "• Adjust Volume: Type 'volume <0-100>' to change the lofi station volume.",
+      type: "success"
+    };
+  }
+
   // 8. BYE / EXIT
   if (matches(["bye", "goodbye", "exit", "quit", "close"])) {
     return {

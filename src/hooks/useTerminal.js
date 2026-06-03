@@ -1,5 +1,69 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { getAIResponse } from '../utils/aiResponder';
+
+// Lofi music playlist data
+const MUSIC_PLAYLIST = [
+  {
+    title: "Back Alley Daydream",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/01-2258203-Dave%20Crum-Back%20Alley%20Daydream.mp3",
+    duration: "1:55"
+  },
+  {
+    title: "Clouds on Repeat",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/02-2258205-Dave%20Crum-Clouds%20on%20Repeat.mp3",
+    duration: "1:50"
+  },
+  {
+    title: "Rain on the Skylight",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/03-2258241-Dave%20Crum-Rain%20on%20the%20Skylight.mp3",
+    duration: "2:11"
+  },
+  {
+    title: "Raindrops on Pine Needles",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/04-2258243-Dave%20Crum-Raindrops%20on%20Pine%20Needles.mp3",
+    duration: "2:36"
+  },
+  {
+    title: "Roots and Reflections",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/05-2258244-Dave%20Crum-Roots%20and%20Reflections.mp3",
+    duration: "2:05"
+  },
+  {
+    title: "Whispers Between Trees",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/06-2258248-Dave%20Crum-Whispers%20Between%20Trees.mp3",
+    duration: "1:45"
+  },
+  {
+    title: "Wind-Up Dreamscape",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/07-2258249-Dave%20Crum-Wind-Up%20Dreamscape.mp3",
+    duration: "2:36"
+  },
+  {
+    title: "Waves on Cassette",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/08-2258247-Dave%20Crum-Waves%20on%20Cassette.mp3",
+    duration: "2:18"
+  },
+  {
+    title: "Umbrellas and Echoes",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/09-2258246-Dave%20Crum-Umbrellas%20and%20Echoes.mp3",
+    duration: "2:52"
+  },
+  {
+    title: "The Wind Knows My Name",
+    artist: "Dave Crum",
+    src: "https://archive.org/download/jamendo-605372/10-2258245-Dave%20Crum-The%20Wind%20Knows%20My%20Name.mp3",
+    duration: "2:09"
+  }
+];
 
 
 // Core projects data
@@ -38,6 +102,18 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
   const [commandQueue, setCommandQueue] = useState([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [gameActive, setGameActive] = useState(false);
+
+  // Audio Player states & instances
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState(0);
+  const [audioVolume, setAudioVolume] = useState(0.5);
+
+  const audioRef = useRef(null);
+  if (!audioRef.current) {
+    audioRef.current = new Audio();
+    audioRef.current.crossOrigin = "anonymous";
+    audioRef.current.volume = audioVolume;
+  }
 
 
   // Contact form multi-step state
@@ -86,6 +162,78 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
       { text: "Type 'help' to display options.", type: "system" }
     ]);
   }, []);
+
+  const playTrack = useCallback((index) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (index < 0 || index >= MUSIC_PLAYLIST.length) return;
+
+    const track = MUSIC_PLAYLIST[index];
+    const isNewTrack = audio.src !== track.src;
+    
+    if (isNewTrack) {
+      audio.src = track.src;
+      audio.load();
+    }
+
+    audio.play()
+      .then(() => {
+        setIsPlaying(true);
+        setCurrentTrack(index);
+      })
+      .catch(err => {
+        console.log("Audio playback failed:", err);
+        setIsPlaying(false);
+      });
+  }, []);
+
+  const pauseTrack = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.pause();
+    setIsPlaying(false);
+  }, []);
+
+  const togglePlay = useCallback(() => {
+    if (isPlaying) {
+      pauseTrack();
+    } else {
+      playTrack(currentTrack);
+    }
+  }, [isPlaying, currentTrack, playTrack, pauseTrack]);
+
+  const nextTrack = useCallback(() => {
+    const nextIdx = (currentTrack + 1) % MUSIC_PLAYLIST.length;
+    playTrack(nextIdx);
+  }, [currentTrack, playTrack]);
+
+  const prevTrack = useCallback(() => {
+    const prevIdx = (currentTrack - 1 + MUSIC_PLAYLIST.length) % MUSIC_PLAYLIST.length;
+    playTrack(prevIdx);
+  }, [currentTrack, playTrack]);
+
+  const changeVolume = useCallback((val) => {
+    const cleanVal = Math.max(0, Math.min(1, val));
+    setAudioVolume(cleanVal);
+    if (audioRef.current) {
+      audioRef.current.volume = cleanVal;
+    }
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      nextTrack();
+    };
+
+    audio.addEventListener('ended', handleEnded);
+    return () => {
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, [nextTrack]);
 
   const simulateTyping = useCallback((text, type = "normal", speed = 10) => {
     setAiTyping(true);
@@ -216,6 +364,8 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("  theme <val> - Switch skins: [dracula, cyberpunk, matrix, retro]", "normal");
         addLine("  sound       - Toggle interface typing sound click [on/off]", "normal");
         addLine("  play <game> - Launches Retro Arcade. Try: 'play', 'play snake', 'play invaders'", "normal");
+        addLine("  music <opt> - Control Lofi Radio. Try: 'music list', 'music play', 'music pause'", "normal");
+        addLine("  volume <val>- Set volume level (0-100).", "normal");
         addLine("  clear       - Wipes the console terminal history grid.", "normal");
         addLine("  neofetch    - Retro hardware and profile spec list.", "normal");
         break;
@@ -314,9 +464,100 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         } else if (['invaders', 'space', 'shooter'].includes(chosenGame)) {
           addLine("🎮 Initializing DevInvaders Virtual Thread...", "system");
           setGameActive('invaders');
+        } else if (chosenGame === 'music' || chosenGame === 'lofi') {
+          addLine("🎵 Booting Lofi Music Station daemon...", "success");
+          playTrack(currentTrack);
         } else {
           addLine("🎮 Initializing DevPulse Retro Arcade Cabinet Selection Thread...", "system");
           setGameActive('menu');
+        }
+        break;
+
+      case 'music':
+      case 'lofi': {
+        const subCommand = args[0] ? args[0].toLowerCase() : null;
+        if (!subCommand) {
+          addLine("🎵 Lofi Music Station CLI", "title");
+          addLine("Available options:", "system");
+          addLine("  music play        - Start playing current lofi track.", "normal");
+          addLine("  music play <1-10> - Play specific track from playlist.", "normal");
+          addLine("  music pause       - Pause playing music.", "normal");
+          addLine("  music next        - Skip to next track.", "normal");
+          addLine("  music prev        - Go back to previous track.", "normal");
+          addLine("  music list        - Display tracks list.", "normal");
+          addLine("  music volume <0-100> - Adjust station volume.", "normal");
+          break;
+        }
+
+        if (subCommand === 'play') {
+          const trackArg = args[1];
+          if (trackArg) {
+            const trackNum = parseInt(trackArg, 10);
+            if (isNaN(trackNum) || trackNum < 1 || trackNum > MUSIC_PLAYLIST.length) {
+              const query = args.slice(1).join(" ").toLowerCase();
+              const foundIdx = MUSIC_PLAYLIST.findIndex(t => t.title.toLowerCase().includes(query));
+              if (foundIdx !== -1) {
+                addLine(`🔊 Stream requested: [${foundIdx + 1}] ${MUSIC_PLAYLIST[foundIdx].title} by ${MUSIC_PLAYLIST[foundIdx].artist}...`, "success");
+                playTrack(foundIdx);
+              } else {
+                addLine(`⚠️ Invalid track index or search query. Must be 1 to ${MUSIC_PLAYLIST.length} or track title.`, "error");
+              }
+            } else {
+              addLine(`🔊 Stream requested: [${trackNum}] ${MUSIC_PLAYLIST[trackNum - 1].title} by ${MUSIC_PLAYLIST[trackNum - 1].artist}...`, "success");
+              playTrack(trackNum - 1);
+            }
+          } else {
+            addLine(`🔊 Resuming lofi stream: ${MUSIC_PLAYLIST[currentTrack].title}...`, "success");
+            playTrack(currentTrack);
+          }
+        } else if (subCommand === 'pause' || subCommand === 'stop') {
+          pauseTrack();
+          addLine("⏸️ Lofi stream paused.", "system");
+        } else if (subCommand === 'next') {
+          nextTrack();
+          const nextIdx = (currentTrack + 1) % MUSIC_PLAYLIST.length;
+          addLine(`⏭️ Skipping to: [${nextIdx + 1}] ${MUSIC_PLAYLIST[nextIdx].title}...`, "success");
+        } else if (subCommand === 'prev') {
+          prevTrack();
+          const prevIdx = (currentTrack - 1 + MUSIC_PLAYLIST.length) % MUSIC_PLAYLIST.length;
+          addLine(`⏮️ Returning to: [${prevIdx + 1}] ${MUSIC_PLAYLIST[prevIdx].title}...`, "success");
+        } else if (subCommand === 'list') {
+          addLine("🎵 DevPulse Lofi Station Playlist:", "title");
+          MUSIC_PLAYLIST.forEach((t, i) => {
+            const isCurrent = i === currentTrack && isPlaying;
+            addLine(`${isCurrent ? '▶ ' : '  '}[${i + 1}] ${t.title.padEnd(28)} - ${t.artist} (${t.duration})`, isCurrent ? "success" : "normal");
+          });
+        } else if (subCommand === 'volume') {
+          const volArg = args[1];
+          if (!volArg) {
+            addLine(`🔊 Station Volume: ${Math.round(audioVolume * 100)}%`, "system");
+          } else {
+            const pct = parseInt(volArg, 10);
+            if (isNaN(pct) || pct < 0 || pct > 100) {
+              addLine("⚠️ Volume must be a number between 0 and 100.", "error");
+            } else {
+              changeVolume(pct / 100);
+              addLine(`🔊 Volume set to ${pct}%`, "success");
+            }
+          }
+        } else {
+          addLine(`⚠️ Unknown music command option: '${subCommand}'. Try 'music' or 'help'.`, "error");
+        }
+        break;
+      }
+
+      case 'volume':
+        if (!args[0]) {
+          addLine(`🔊 Volume level: ${Math.round(audioVolume * 100)}%`, "system");
+          addLine("Usage: volume <0-100>", "secondary");
+        } else {
+          const pct = parseInt(args[0], 10);
+          if (isNaN(pct) || pct < 0 || pct > 100) {
+            addLine("⚠️ Volume level must be between 0 and 100.", "error");
+          } else {
+            changeVolume(pct / 100);
+            addLine(`🔊 Volume adjusted to: ${pct}%`, "success");
+          }
         }
         break;
 
@@ -357,7 +598,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine(`⚠️ Command not found: '${command}'. Type 'help' for available instructions.`, "error");
     }
 
-  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, aiMode, simulateTyping]);
+  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, aiMode, simulateTyping, isPlaying, currentTrack, audioVolume, playTrack, pauseTrack, nextTrack, prevTrack, changeVolume]);
 
   return {
     history,
@@ -370,7 +611,20 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
     playTypeSound,
     gameActive,
     setGameActive,
-    soundEnabled
+    soundEnabled,
+    
+    // Audio Player integrations
+    audioElement: audioRef.current,
+    isPlaying,
+    currentTrack,
+    audioVolume,
+    playTrack,
+    pauseTrack,
+    togglePlay,
+    nextTrack,
+    prevTrack,
+    changeVolume,
+    playlist: MUSIC_PLAYLIST
   };
 
 }
