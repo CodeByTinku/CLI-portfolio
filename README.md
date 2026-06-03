@@ -75,6 +75,15 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **One-off Quick Query**: Type `ask <question>` to instantly prompt PulseAI and return a fast single answer without entering conversational loop.
 * **Blinking Loader State**: The input prompt automatically transitions to `PulseAI 🤖 [Thinking...] ➜ ` and locks keyboard input during AI sound-typist renders.
 
+### 🎵 Lofi Focus Station & Dual-Mode Visualizer
+* **Royalty-Free Beats Streaming**: Connects directly to Dave Crum's LoFi Sketchbook collection on the Internet Archive via standard HTTP streams.
+* **Synchronized Web Audio Analyzer**: Uses the HTML5 Web Audio API `AnalyserNode` to read frequency bands in real-time.
+* **Dual Visualizer Modes**:
+  * **Neon Spectrum**: A smooth canvas-drawn equalizer utilizing linear gradients matching the active system theme.
+  * **Retro ASCII Matrix**: A character-based real-time equalizer grid that translates live frequencies into a text-based ASCII equalizer of stacked characters (`█`, `▄`, `░`, ` `) inside a `<pre>` element for the ultimate terminal aesthetic.
+* **Media Controls Dashboard**: Includes GUI play, pause, track skipping, and volume slider alongside spinning vinyl disk visualizations.
+* **Complete CLI Integration**: Supports direct control via `music play`, `music pause`, `music next`, `music prev`, `music list`, and `volume <0-100>` terminal commands.
+
 ---
 
 
@@ -95,6 +104,8 @@ Typing `help` in the terminal details all supported interactive shell commands:
 | `theme <val>` | `theme cyberpunk` | Switches the theme environment instantly. Options: `[dracula, cyberpunk, matrix, retro]`. |
 | `sound <val>` | `sound off` | Toggles Web Audio typing synthesizer click sounds. Options: `[on, off]`. |
 | `play` | `play` or `play snake` or `play invaders` | Launches the interactive Retro Arcade Cabinet select menu or boots directly into a game shortcut. |
+| `music` | `music play <track>` or `music pause` or `music list` | Controls the built-in Lofi Music Station playback and track selection. |
+| `volume` | `volume <0-100>` | Adjusts the music player volume to the specified percentage. |
 | `neofetch` | `neofetch` | Outputs classic retro hardware system specs, React core, and OS status. |
 | `clear` | `clear` | Wipes the console screen buffer clean. |
 
@@ -151,6 +162,7 @@ devpulse/
 │   │   │   └── TerminalInput.jsx    # Custom keyboard capture & auto-completion
 │   │   ├── Visualizer/
 │   │   │   ├── GithubStats.jsx      # Recharts graph & commit matrix
+│   │   │   ├── LofiPlayer.jsx       # Lofi Music Station GUI player & visualizer
 │   │   │   └── NodeTree.jsx         # HTML5 Canvas physics bubble graph
 │   │   └── ThemeSelector.jsx        # GUI theme button container
 │   ├── hooks/
