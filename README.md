@@ -1,6 +1,6 @@
-# 🖥️ DevPulse OS v1.0.4
+# 🖥️ DevPulse OS v1.1.0
 
-> A futuristic, interactive, terminal-based developer portfolio combined with a visual GUI workspace. Featuring interactive physics-based node graphs, dynamic multi-theme simulation, simulated GitHub analytics, and synthesized retro sound effects.
+> A futuristic, interactive, terminal-based developer portfolio combined with a visual GUI workspace. Featuring real-time resource monitors, interactive physics-based node graphs, dynamic multi-theme simulation, simulated GitHub analytics, and synthesized retro sound effects.
 
 ---
 
@@ -84,6 +84,14 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **Media Controls Dashboard**: Includes GUI play, pause, track skipping, and volume slider alongside spinning vinyl disk visualizations.
 * **Complete CLI Integration**: Supports direct control via `music play`, `music pause`, `music next`, `music prev`, `music list`, and `volume <0-100>` terminal commands.
 
+### 🖥️ Real-time System Monitor & Cyber Diagnostics (`sysmon`)
+* **Real-time SVG Line Graph**: Features a responsive SVG oscilloscope chart mapping simulated CPU workloads.
+* **Telemetry Meters**: Circular RAM allocation neon dial and dynamic Network bandwidth (upload/download) speeds.
+* **Interactive CLI Monitor (`htop` mode)**: Typing `sysmon` or `monitor` launches a fullscreen interactive terminal diagnostic monitor.
+* **Processes Checklist Controls**: Use keyboard keys `[ArrowUp]` / `[ArrowDown]` or `[W]` / `[S]` to select threads, and press `[K]` to kill any running daemon process (triggers a descending glitch laser sweep chiptune sound!).
+* **Workload Spiker**: Toggle active stress test workloads with the GUI spiker button or typing `[S]` in the CLI monitor to observe immediate CPU heat/activity surges and sound alerts.
+* **Firewall Threat Logs**: Interactive threat notifications intercepting simulated port-scan attacks with custom audio sweeps.
+
 ---
 
 
@@ -106,6 +114,7 @@ Typing `help` in the terminal details all supported interactive shell commands:
 | `play` | `play` or `play snake` or `play invaders` | Launches the interactive Retro Arcade Cabinet select menu or boots directly into a game shortcut. |
 | `music` | `music play <track>` or `music pause` or `music list` | Controls the built-in Lofi Music Station playback and track selection. |
 | `volume` | `volume <0-100>` | Adjusts the music player volume to the specified percentage. |
+| `sysmon` | `sysmon` or `monitor` or `status` | Launches the interactive fullscreen system diagnostics monitor utility. |
 | `neofetch` | `neofetch` | Outputs classic retro hardware system specs, React core, and OS status. |
 | `clear` | `clear` | Wipes the console screen buffer clean. |
 
@@ -158,11 +167,13 @@ devpulse/
 │   │   │   ├── TerminalGame.jsx     # Master Arcade Cabinet select screen
 │   │   │   ├── SnakeGame.jsx        # Standalone Snake.OS logic component
 │   │   │   ├── DevInvaders.jsx      # Standalone DevInvaders space shooter logic
+│   │   │   ├── TerminalSysmon.jsx   # Interactive fullscreen system diagnostics console
 │   │   │   ├── TerminalHistory.jsx  # Renders scrolling shell list
 │   │   │   └── TerminalInput.jsx    # Custom keyboard capture & auto-completion
 │   │   ├── Visualizer/
 │   │   │   ├── GithubStats.jsx      # Recharts graph & commit matrix
 │   │   │   ├── LofiPlayer.jsx       # Lofi Music Station GUI player & visualizer
+│   │   │   ├── SystemMonitor.jsx    # GUI Real-time diagnostics panels & graph
 │   │   │   └── NodeTree.jsx         # HTML5 Canvas physics bubble graph
 │   │   └── ThemeSelector.jsx        # GUI theme button container
 │   ├── hooks/
