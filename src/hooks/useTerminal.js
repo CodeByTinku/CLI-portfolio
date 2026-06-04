@@ -102,6 +102,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
   const [commandQueue, setCommandQueue] = useState([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [gameActive, setGameActive] = useState(false);
+  const [sysmonActive, setSysmonActive] = useState(false);
 
   // Audio Player states & instances
   const [isPlaying, setIsPlaying] = useState(false);
@@ -366,8 +367,16 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("  play <game> - Launches Retro Arcade. Try: 'play', 'play snake', 'play invaders'", "normal");
         addLine("  music <opt> - Control Lofi Radio. Try: 'music list', 'music play', 'music pause'", "normal");
         addLine("  volume <val>- Set volume level (0-100).", "normal");
+        addLine("  sysmon      - Launches interactive fullscreen system diagnostics monitor.", "normal");
         addLine("  clear       - Wipes the console terminal history grid.", "normal");
         addLine("  neofetch    - Retro hardware and profile spec list.", "normal");
+        break;
+
+      case 'sysmon':
+      case 'monitor':
+      case 'status':
+        addLine("🖥️ Booting System Resource Monitor & Diagnostic Daemon...", "success");
+        setSysmonActive(true);
         break;
 
 
@@ -598,7 +607,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine(`⚠️ Command not found: '${command}'. Type 'help' for available instructions.`, "error");
     }
 
-  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, aiMode, simulateTyping, isPlaying, currentTrack, audioVolume, playTrack, pauseTrack, nextTrack, prevTrack, changeVolume]);
+  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, sysmonActive, setSysmonActive, aiMode, simulateTyping, isPlaying, currentTrack, audioVolume, playTrack, pauseTrack, nextTrack, prevTrack, changeVolume]);
 
   return {
     history,
@@ -611,6 +620,8 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
     playTypeSound,
     gameActive,
     setGameActive,
+    sysmonActive,
+    setSysmonActive,
     soundEnabled,
     
     // Audio Player integrations

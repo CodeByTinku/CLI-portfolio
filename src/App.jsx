@@ -7,11 +7,14 @@ import ThemeSelector from './components/ThemeSelector';
 import TerminalGame from './components/Terminal/TerminalGame';
 import { useTerminal } from './hooks/useTerminal';
 import LofiPlayer from './components/Visualizer/LofiPlayer';
+import TerminalSysmon from './components/Terminal/TerminalSysmon';
+import SystemMonitor from './components/Visualizer/SystemMonitor';
 
 
 function App() {
   const [activeTheme, setActiveTheme] = useState('dracula');
   const [triggerGlow, setTriggerGlow] = useState(null);
+  const [dashboardTab, setDashboardTab] = useState('git');
   const matrixCanvasRef = useRef(null);
 
   // Set active theme dynamically in DOM dataset
@@ -36,6 +39,8 @@ function App() {
     playTypeSound,
     gameActive,
     setGameActive,
+    sysmonActive,
+    setSysmonActive,
     soundEnabled,
     addLine,
     
@@ -56,6 +61,13 @@ function App() {
     setGameActive(false);
     addLine(`🕹️ Exited DevPulse Arcade. Final score: ${finalScore} points.`, "system");
   };
+
+  // Sync terminal command to active GUI dashboard tab
+  useEffect(() => {
+    if (sysmonActive) {
+      setDashboardTab('sysmon');
+    }
+  }, [sysmonActive]);
 
 
   // Matrix falling rain characters background loop for matrix theme
@@ -182,7 +194,12 @@ function App() {
           </div>
 
           {/* Core terminal histories and inputs */}
-          {gameActive ? (
+          {sysmonActive ? (
+            <TerminalSysmon 
+              onExit={() => setSysmonActive(false)} 
+              soundEnabled={soundEnabled} 
+            />
+          ) : gameActive ? (
             <TerminalGame 
               onExit={handleGameExit} 
               soundEnabled={soundEnabled} 
@@ -227,8 +244,32 @@ function App() {
             playlist={playlist}
           />
 
-          {/* 3. Visual Git Metrics and charts board */}
-          <GithubStats />
+          {/* 3. Visual Git Metrics and charts board OR System Diagnostics */}
+          <div className="flex flex-col gap-4">
+            <div className="flex bg-[rgba(0,0,0,0.35)] p-1 rounded-lg border border-[var(--border-color)]">
+              <button 
+                onClick={() => setDashboardTab('git')}
+                className={`flex-1 py-1.5 text-center text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
+                  dashboardTab === 'git' 
+                    ? 'bg-[var(--primary-color)] text-black shadow-[0_0_8px_var(--primary-color)] font-bold' 
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                }`}
+              >
+                GITHUB STATS
+              </button>
+              <button 
+                onClick={() => setDashboardTab('sysmon')}
+                className={`flex-1 py-1.5 text-center text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
+                  dashboardTab === 'sysmon' 
+                    ? 'bg-[var(--primary-color)] text-black shadow-[0_0_8px_var(--primary-color)] font-bold' 
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                }`}
+              >
+                SYSTEM DIAGNOSTICS
+              </button>
+            </div>
+            {dashboardTab === 'git' ? <GithubStats /> : <SystemMonitor />}
+          </div>
         </section>
       </main>
 
