@@ -81,6 +81,21 @@ body {
   --selection-bg: rgba(255, 176, 0, 0.2);
 }
 
+[data-theme="toxic"] {
+  --bg-color: #030804;
+  --panel-bg: rgba(3, 8, 4, 0.85);
+  --text-primary: #39ff14; /* Neon toxic green */
+  --text-secondary: #cba6f7; /* Soft violet contrast */
+  --primary-color: #39ff14;
+  --secondary-color: #a020f0; /* Deep toxic purple */
+  --accent-color: #ff0055;
+  --success-color: #39ff14;
+  --glow-shadow: 0 0 20px rgba(57, 255, 20, 0.65), 0 0 10px rgba(160, 32, 240, 0.4);
+  --border-color: rgba(57, 255, 20, 0.35);
+  --selection-bg: rgba(57, 255, 20, 0.25);
+}
+
+
 /* Beautiful Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
@@ -121,6 +136,7 @@ body {
 
 [data-theme="retro"] .crt-overlay::after,
 [data-theme="matrix"] .crt-overlay::after,
+[data-theme="toxic"] .crt-overlay::after,
 [data-theme="cyberpunk"] .crt-overlay::after {
   animation: flicker 0.15s infinite;
 }

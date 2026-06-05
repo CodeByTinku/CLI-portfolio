@@ -9,12 +9,24 @@ import { useTerminal } from './hooks/useTerminal';
 import LofiPlayer from './components/Visualizer/LofiPlayer';
 import TerminalSysmon from './components/Terminal/TerminalSysmon';
 import SystemMonitor from './components/Visualizer/SystemMonitor';
+import CyberBreach from './components/Visualizer/CyberBreach';
 
 
 function App() {
   const [activeTheme, setActiveTheme] = useState('dracula');
   const [triggerGlow, setTriggerGlow] = useState(null);
   const [dashboardTab, setDashboardTab] = useState('git');
+  const [isToxicUnlocked, setIsToxicUnlocked] = useState(() => {
+    const savedNodes = localStorage.getItem('devpulse_breach_nodes');
+    if (savedNodes) {
+      try {
+        const parsed = JSON.parse(savedNodes);
+        const mainframe = parsed.find(n => n.id === 'mainframe');
+        return !!(mainframe && mainframe.hacked);
+      } catch (e) {}
+    }
+    return false;
+  });
   const matrixCanvasRef = useRef(null);
 
   // Set active theme dynamically in DOM dataset
@@ -54,7 +66,7 @@ function App() {
     prevTrack,
     changeVolume,
     playlist
-  } = useTerminal(activeTheme, setActiveTheme, handleNodeTrigger);
+  } = useTerminal(activeTheme, setActiveTheme, handleNodeTrigger, setDashboardTab);
 
 
   const handleGameExit = (finalScore) => {
@@ -164,7 +176,7 @@ function App() {
         </div>
 
         {/* Theme select controls */}
-        <ThemeSelector activeTheme={activeTheme} onSelectTheme={setActiveTheme} />
+        <ThemeSelector activeTheme={activeTheme} onSelectTheme={setActiveTheme} isToxicUnlocked={isToxicUnlocked} />
       </header>
 
       {/* Main Workspace grid splitting */}
@@ -244,12 +256,12 @@ function App() {
             playlist={playlist}
           />
 
-          {/* 3. Visual Git Metrics and charts board OR System Diagnostics */}
+          {/* 3. Visual Git Metrics, System Diagnostics OR Cyber Breach */}
           <div className="flex flex-col gap-4">
             <div className="flex bg-[rgba(0,0,0,0.35)] p-1 rounded-lg border border-[var(--border-color)]">
               <button 
                 onClick={() => setDashboardTab('git')}
-                className={`flex-1 py-1.5 text-center text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
+                className={`flex-1 py-1.5 text-center text-[10px] sm:text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
                   dashboardTab === 'git' 
                     ? 'bg-[var(--primary-color)] text-black shadow-[0_0_8px_var(--primary-color)] font-bold' 
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
@@ -259,16 +271,35 @@ function App() {
               </button>
               <button 
                 onClick={() => setDashboardTab('sysmon')}
-                className={`flex-1 py-1.5 text-center text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
+                className={`flex-1 py-1.5 text-center text-[10px] sm:text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
                   dashboardTab === 'sysmon' 
                     ? 'bg-[var(--primary-color)] text-black shadow-[0_0_8px_var(--primary-color)] font-bold' 
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
                 }`}
               >
-                SYSTEM DIAGNOSTICS
+                SYSTEM
+              </button>
+              <button 
+                onClick={() => setDashboardTab('breach')}
+                className={`flex-1 py-1.5 text-center text-[10px] sm:text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
+                  dashboardTab === 'breach' 
+                    ? 'bg-[var(--primary-color)] text-black shadow-[0_0_8px_var(--primary-color)] font-bold' 
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                }`}
+              >
+                BREACH
               </button>
             </div>
-            {dashboardTab === 'git' ? <GithubStats /> : <SystemMonitor />}
+            {dashboardTab === 'git' ? (
+              <GithubStats />
+            ) : dashboardTab === 'sysmon' ? (
+              <SystemMonitor />
+            ) : (
+              <CyberBreach 
+                onUnlockToxicTheme={() => setIsToxicUnlocked(true)} 
+                soundEnabled={soundEnabled} 
+              />
+            )}
           </div>
         </section>
       </main>

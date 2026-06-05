@@ -92,7 +92,7 @@ const SKILLS_DATA = [
   { name: "Figma", level: 80, bar: "████████░░" },
 ];
 
-export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
+export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger, setDashboardTab) {
   const [history, setHistory] = useState([
     { text: "Welcome to DevPulse OS v1.0.4", type: "system" },
     { text: "Type 'help' to fetch all supported core shell commands.", type: "system" },
@@ -362,12 +362,14 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("  contact     - Launches interactive input wizard to send me an email.", "normal");
         addLine("  ai          - Launches interactive conversational PulseAI chatbot.", "normal");
         addLine("  ask <query> - Instantly query PulseAI with a single natural language question.", "normal");
-        addLine("  theme <val> - Switch skins: [dracula, cyberpunk, matrix, retro]", "normal");
+        addLine("  theme <val> - Switch skins: [dracula, cyberpunk, matrix, retro, toxic]", "normal");
         addLine("  sound       - Toggle interface typing sound click [on/off]", "normal");
         addLine("  play <game> - Launches Retro Arcade. Try: 'play', 'play snake', 'play invaders'", "normal");
         addLine("  music <opt> - Control Lofi Radio. Try: 'music list', 'music play', 'music pause'", "normal");
         addLine("  volume <val>- Set volume level (0-100).", "normal");
         addLine("  sysmon      - Launches interactive fullscreen system diagnostics monitor.", "normal");
+        addLine("  hack        - Launch Cyber Breach visual interface in Right Panel.", "normal");
+        addLine("  hack status - Display target node network permission levels.", "normal");
         addLine("  clear       - Wipes the console terminal history grid.", "normal");
         addLine("  neofetch    - Retro hardware and profile spec list.", "normal");
         break;
@@ -378,6 +380,34 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine("🖥️ Booting System Resource Monitor & Diagnostic Daemon...", "success");
         setSysmonActive(true);
         break;
+
+      case 'hack':
+      case 'breach': {
+        const sub = args[0] ? args[0].toLowerCase() : null;
+        if (sub === 'status') {
+          addLine("📡 Current Subnet Breach Status:", "title");
+          const savedNodes = localStorage.getItem('devpulse_breach_nodes');
+          if (savedNodes) {
+            try {
+              const parsed = JSON.parse(savedNodes);
+              parsed.forEach((n, idx) => {
+                addLine(`Node ${idx + 1}: ${n.name.padEnd(16)} [${n.ip}] - ${n.hacked ? '🔓 COMPROMISED' : n.locked ? '🔒 LOCKED' : '🔴 VULNERABLE'}`, n.hacked ? "success" : n.locked ? "secondary" : "error");
+              });
+            } catch (e) {
+              addLine("Error parsing breach nodes database.", "error");
+            }
+          } else {
+            addLine("Node 1: Firewall Gate    [192.168.42.1] - 🔴 VULNERABLE", "error");
+            addLine("Node 2: Database Core    [192.168.42.5] - 🔒 LOCKED", "secondary");
+            addLine("Node 3: Mainframe Admin  [192.168.42.9] - 🔒 LOCKED", "secondary");
+          }
+          break;
+        }
+        
+        addLine("📡 Initializing Cyber Breach Terminal. Connection mapped to Right Panel dashboard tab...", "success");
+        if (setDashboardTab) setDashboardTab('breach');
+        break;
+      }
 
 
 
@@ -434,13 +464,29 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
 
       case 'theme':
         if (!args[0]) {
-          addLine("⚠️ Please specify a theme name. Options: [dracula, cyberpunk, matrix, retro]", "error");
+          addLine("⚠️ Please specify a theme name. Options: [dracula, cyberpunk, matrix, retro, toxic]", "error");
           break;
         }
         const targetTheme = args[0].toLowerCase();
         if (['dracula', 'cyberpunk', 'matrix', 'retro'].includes(targetTheme)) {
           setActiveTheme(targetTheme);
           addLine(`🎨 Environment theme successfully switched to: [${targetTheme}]`, "success");
+        } else if (targetTheme === 'toxic') {
+          const savedNodes = localStorage.getItem('devpulse_breach_nodes');
+          let unlocked = false;
+          if (savedNodes) {
+            try {
+              const parsed = JSON.parse(savedNodes);
+              const mainframe = parsed.find(n => n.id === 'mainframe');
+              if (mainframe && mainframe.hacked) unlocked = true;
+            } catch (e) {}
+          }
+          if (unlocked) {
+            setActiveTheme('toxic');
+            addLine("🎨 Environment theme successfully switched to: [toxic]", "success");
+          } else {
+            addLine("⚠️ Theme 'toxic' is locked. Compromise Node 3 (Mainframe Admin) in Cyber Breach to unlock!", "error");
+          }
         } else {
           addLine(`⚠️ Theme '${targetTheme}' is not supported. Try help.`, "error");
         }
@@ -607,7 +653,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger) {
         addLine(`⚠️ Command not found: '${command}'. Type 'help' for available instructions.`, "error");
     }
 
-  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, sysmonActive, setSysmonActive, aiMode, simulateTyping, isPlaying, currentTrack, audioVolume, playTrack, pauseTrack, nextTrack, prevTrack, changeVolume]);
+  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, sysmonActive, setSysmonActive, aiMode, simulateTyping, isPlaying, currentTrack, audioVolume, playTrack, pauseTrack, nextTrack, prevTrack, changeVolume, setDashboardTab]);
 
   return {
     history,

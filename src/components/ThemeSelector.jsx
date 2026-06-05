@@ -7,14 +7,19 @@ const THEMES = [
   { id: 'retro', name: 'Retro IBM', color: 'bg-[#ffb000] border-[#ffb000]' }
 ];
 
-function ThemeSelector({ activeTheme, onSelectTheme }) {
+function ThemeSelector({ activeTheme, onSelectTheme, isToxicUnlocked }) {
+  const availableThemes = [
+    ...THEMES,
+    ...(isToxicUnlocked ? [{ id: 'toxic', name: 'Toxic Neon', color: 'bg-[#39ff14] border-[#39ff14]' }] : [])
+  ];
+
   return (
     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border-color)] bg-[rgba(0,0,0,0.3)] shadow-inner">
       <span className="text-[10px] font-fira tracking-widest text-[var(--text-secondary)] select-none">
         ACTIVE_ENV:
       </span>
       <div className="flex items-center gap-1.5">
-        {THEMES.map(theme => {
+        {availableThemes.map(theme => {
           const isActive = activeTheme === theme.id;
           return (
             <button

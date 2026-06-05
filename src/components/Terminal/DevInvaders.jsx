@@ -19,6 +19,7 @@ function DevInvaders({ onExit, soundEnabled }) {
   const [isPaused, setIsPaused] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [level, setLevel] = useState(1);
+  const [isGodMode, setIsGodMode] = useState(false);
 
   const gameLoopRef = useRef(null);
   const ticksRef = useRef(0);
@@ -181,12 +182,27 @@ function DevInvaders({ onExit, soundEnabled }) {
         playRetroSound('tick');
       } else if (e.key === 'p' || e.key === 'P') {
         setIsPaused(prev => !prev);
+      } else if (e.key === 'g' || e.key === 'G') {
+        // Check if database core node is hacked in localStorage to permit cheat
+        const savedNodes = localStorage.getItem('devpulse_breach_nodes');
+        let allowed = false;
+        if (savedNodes) {
+          try {
+            const parsed = JSON.parse(savedNodes);
+            const dbNode = parsed.find(n => n.id === 'database');
+            if (dbNode && dbNode.hacked) allowed = true;
+          } catch (e) {}
+        }
+        if (allowed) {
+          setIsGodMode(prev => !prev);
+          playRetroSound('victory');
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameStarted, gameOver, victory, isPaused, playerX, bullets, score, onExit, initGame, playRetroSound]);
+  }, [gameStarted, gameOver, victory, isPaused, playerX, bullets, score, onExit, initGame, playRetroSound, isGodMode]);
 
   // Main game tick engine
   useEffect(() => {
@@ -333,17 +349,16 @@ function DevInvaders({ onExit, soundEnabled }) {
         const newEnemyBullets = [];
 
         for (let eb of prevEnemyBullets) {
-          // Check player ship cells:
-          // Center: (playerX, 13)
-          // Cannon: (playerX, 12)
-          // Left Wing: (playerX - 1, 13)
-          // Right Wing: (playerX + 1, 13)
           const hitCenter = eb.x === playerX && eb.y === 13;
           const hitCannon = eb.x === playerX && eb.y === 12;
           const hitLeftWing = eb.x === playerX - 1 && eb.y === 13;
           const hitRightWing = eb.x === playerX + 1 && eb.y === 13;
 
           if (hitCenter || hitCannon || hitLeftWing || hitRightWing) {
+            if (isGodMode) {
+              // Ignore damage
+              continue;
+            }
             playerHit = true;
             setGameOver(true);
             playRetroSound('player_explode');
@@ -356,7 +371,7 @@ function DevInvaders({ onExit, soundEnabled }) {
       });
     }
 
-  }, [bullets, enemyBullets, enemies, playerX, gameOver, victory, gameStarted, isPaused, highScore, playRetroSound]);
+  }, [bullets, enemyBullets, enemies, playerX, gameOver, victory, gameStarted, isPaused, highScore, playRetroSound, isGodMode]);
 
   // Render game cells
   const renderGrid = () => {
@@ -414,8 +429,13 @@ function DevInvaders({ onExit, soundEnabled }) {
         <div>
           SCORE: <span className="text-[var(--success-color)] font-bold">{score.toString().padStart(4, '0')}</span>
         </div>
-        <div className="text-[var(--text-secondary)]">
+        <div className="text-[var(--text-secondary)] flex items-center gap-1.5">
           STAGE: <span className="font-semibold text-[var(--primary-color)]">{level}</span>
+          {isGodMode && (
+            <span className="px-1 text-[8.5px] bg-[var(--primary-color)] text-black font-extrabold rounded animate-pulse">
+              🛡️ GOD_MODE
+            </span>
+          )}
         </div>
         <div>
           HIGH SCORE: <span className="text-[var(--primary-color)] font-bold">{highScore.toString().padStart(4, '0')}</span>
