@@ -1,6 +1,8 @@
 # 🖥️ DevPulse OS v1.1.0
 
 > A futuristic, interactive, terminal-based developer portfolio combined with a visual GUI workspace. Featuring real-time resource monitors, interactive physics-based node graphs, dynamic multi-theme simulation, simulated GitHub analytics, and synthesized retro sound effects.
+>
+> **Built entirely via "Vibe Coding" using Gemini 3.5 Flash! 🚀**
 
 ---
 
@@ -201,5 +203,5 @@ devpulse/
 
 ## 👤 Author & Design
 
-Designed and developed with ❤️ by **Tinku**. 
+Designed and developed with ❤️ by **Tinku** — built entirely via **"Vibe Coding"** using **Gemini 3.5 Flash**! 🚀
 Feel free to launch the terminal and type `contact` to get in touch!
