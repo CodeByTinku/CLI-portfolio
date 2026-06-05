@@ -49,6 +49,7 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 2. **🦾 Cyberpunk**: High-octane neon cyan accents, hot pink boundaries, and a digital neon backdrop matrix grid.
 3. **🟢 Matrix**: Deep black void containing a dynamic canvas binary code stream (Katakana matrix digital rain).
 4. **🔶 Retro IBM**: Nostalgic classic amber PC phosphor feel, CRT flickering scanlines, and high-contrast terminal lines.
+5. **☣️ Toxic Neon (Unlocked)**: Nuclear bright green foreground text paired with deep neon purple borders and a CRT grid scanline flicker (unlocked by hacking Node 3 in Cyber Breach).
 
 ### 📊 Git Analytics & Contribution Board
 * **Visual Language Distribution**: Responsive chart powered by Recharts detailing developer skills (JavaScript, React/JSX, CSS/Tailwind, Node/Express).
@@ -63,7 +64,7 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **Arcade Cabinet Selection Screen**: Typing `play` or `game` seamlessly suspends standard terminal flow and initializes a beautiful retro 80s arcade selection screen with scanline backdrops, arrow-selection systems, descriptions, hotkeys, and chip-tune chimes!
 * **Two Integrated Retro Games**:
   * 🐍 **Snake.OS**: The classic grid-based buffer overflow snake game.
-  * 👾 **DevInvaders**: A fully featured retro space defense shooter game mapping a spaceship, laser fires, descending core invaders, alien plasma pulses, level stages, and victory rewards onto the 22x14 grid!
+  * 👾 **DevInvaders**: A fully featured retro space defense shooter game mapping a spaceship, laser fires, descending core invaders, alien plasma pulses, level stages, and victory rewards onto the 22x14 grid! *Compromise Node 2 (Database Core) in Cyber Breach to unlock the **God Mode (Invincibility)** cheat via the `[G]` key.*
 * **High Score Persistence**: Persists independent highest score records for both games locally in the browser via **LocalStorage API** (`devpulse_snake_highscore` & `devpulse_invaders_highscore`).
 * **Synthesized Audio Prompts**: Emits retro oscillators frequency beeps for laser fires, spaceship crashes, system reboot sweeps, and sector sanitized victory arpeggios.
 * **Responsive Visual Board**: Features custom neon-glowing CSS cell rendering styled dynamically with active visual themes variables mapping (Amber in Retro, Hacker Green in Matrix, Cyan/Pink in Cyberpunk).
@@ -92,6 +93,13 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **Workload Spiker**: Toggle active stress test workloads with the GUI spiker button or typing `[S]` in the CLI monitor to observe immediate CPU heat/activity surges and sound alerts.
 * **Firewall Threat Logs**: Interactive threat notifications intercepting simulated port-scan attacks with custom audio sweeps.
 
+### 📡 Cyber Breach Sandbox & Decryption Mini-Game
+* **Interactive Subnet Node Graph**: A custom SVG network topology rendering connection statuses (`SECURE`, `VULNERABLE`, `COMPROMISED`, or `LOCKED`) for active ports.
+* **Fallout Decryption Simulator**: Scrambled hex addresses and character matrices where you click to guess passwords, calculating letter likeness scores over 4 attempts before lockout.
+* **Sequential Bypasses**: Crack the Firewall Gate (Node 1) to access the Database Core (Node 2), then compromise the root Mainframe Admin (Node 3).
+* **Workstation Customizations**: Successfully hacking Node 3 registers and unlocks the brand-new glowing **Toxic Neon** environment skin.
+* **Integrated CLI Controls**: Syncs right-hand layout tab automatically by typing `hack` or check network permissions using the `hack status` shell utility.
+
 ---
 
 
@@ -109,12 +117,14 @@ Typing `help` in the terminal details all supported interactive shell commands:
 | `contact` | `contact` | Initializes the multi-step interactive contact mailing assistant. |
 | `ai` | `ai` | Initiates the conversational PulseAI interactive helper chatbot loop. Type `exit` to return to shell. |
 | `ask <val>` | `ask stream` | Queries PulseAI with a single natural language question (e.g., skills, stream, secrets). |
-| `theme <val>` | `theme cyberpunk` | Switches the theme environment instantly. Options: `[dracula, cyberpunk, matrix, retro]`. |
+| `theme <val>` | `theme toxic` | Switches the theme environment instantly. Options: `[dracula, cyberpunk, matrix, retro, toxic]`. |
 | `sound <val>` | `sound off` | Toggles Web Audio typing synthesizer click sounds. Options: `[on, off]`. |
 | `play` | `play` or `play snake` or `play invaders` | Launches the interactive Retro Arcade Cabinet select menu or boots directly into a game shortcut. |
 | `music` | `music play <track>` or `music pause` or `music list` | Controls the built-in Lofi Music Station playback and track selection. |
 | `volume` | `volume <0-100>` | Adjusts the music player volume to the specified percentage. |
 | `sysmon` | `sysmon` or `monitor` or `status` | Launches the interactive fullscreen system diagnostics monitor utility. |
+| `hack` | `hack` | Switches the visual dashboard view to the Cyber Breach node graph. |
+| `hack status` | `hack status` | Renders a table of target IPs, node permissions, and vulnerability statuses in the terminal history. |
 | `neofetch` | `neofetch` | Outputs classic retro hardware system specs, React core, and OS status. |
 | `clear` | `clear` | Wipes the console screen buffer clean. |
 
@@ -174,7 +184,8 @@ devpulse/
 │   │   │   ├── GithubStats.jsx      # Recharts graph & commit matrix
 │   │   │   ├── LofiPlayer.jsx       # Lofi Music Station GUI player & visualizer
 │   │   │   ├── SystemMonitor.jsx    # GUI Real-time diagnostics panels & graph
-│   │   │   └── NodeTree.jsx         # HTML5 Canvas physics bubble graph
+│   │   │   ├── NodeTree.jsx         # HTML5 Canvas physics bubble graph
+│   │   │   └── CyberBreach.jsx      # Cyber Breach Sandbox & Fallout Decryption Game
 │   │   └── ThemeSelector.jsx        # GUI theme button container
 │   ├── hooks/
 │   │   └── useTerminal.js           # CLI State machine & command processors
