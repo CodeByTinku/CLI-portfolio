@@ -72,6 +72,7 @@ const PROJECTS_DATA = [
   { name: "Anime Explorer", desc: "A React app to discover anime and manage your personal watchlist, powered by the Jikan API.", link: "https://anime-explorer-chi.vercel.app/", tags: ["React-Router", "Axios", "Lucide-React", "TailwindCSS"] },
   { name: "Finance Flow", desc: "A modern, interactive budgeting tool designed specifically for students and young professionals.", link: "https://finance-flow-kohl.vercel.app/", tags: ["React", "Rechart-js", "TailwindCSS", "Typescript"] },
   { name: "Github-Visualizer", desc: "React GitHub Dashboard: Animated stats, heatmaps, badges & profile card.", link: "https://git-hub-visualizer.vercel.app/", tags: ["React", "Framer-Motion", "Axios", "Lucide-React"] },
+  { name: "AI-virtual-mouse", desc: "Transforms your webcam into a responsive, low-latency mouse controlled by hand gestures.", link: "#", tags: ["Python", "OpenCV", "mediapipe", "pyautogui", "Numpy"] },
   
 ];
 
