@@ -10,6 +10,7 @@ import LofiPlayer from './components/Visualizer/LofiPlayer';
 import TerminalSysmon from './components/Terminal/TerminalSysmon';
 import SystemMonitor from './components/Visualizer/SystemMonitor';
 import CyberBreach from './components/Visualizer/CyberBreach';
+import WeatherDaemon from './components/Visualizer/WeatherDaemon';
 
 
 function App() {
@@ -65,7 +66,9 @@ function App() {
     nextTrack,
     prevTrack,
     changeVolume,
-    playlist
+    playlist,
+    weatherCity,
+    setWeatherCity
   } = useTerminal(activeTheme, setActiveTheme, handleNodeTrigger, setDashboardTab);
 
 
@@ -267,7 +270,7 @@ function App() {
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
                 }`}
               >
-                GITHUB STATS
+                GITHUB
               </button>
               <button 
                 onClick={() => setDashboardTab('sysmon')}
@@ -289,15 +292,30 @@ function App() {
               >
                 BREACH
               </button>
+              <button 
+                onClick={() => setDashboardTab('weather')}
+                className={`flex-1 py-1.5 text-center text-[10px] sm:text-xs font-semibold tracking-wider font-outfit rounded-md cursor-pointer transition-all duration-200 ${
+                  dashboardTab === 'weather' 
+                    ? 'bg-[var(--primary-color)] text-black shadow-[0_0_8px_var(--primary-color)] font-bold' 
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                }`}
+              >
+                WEATHER
+              </button>
             </div>
             {dashboardTab === 'git' ? (
               <GithubStats />
             ) : dashboardTab === 'sysmon' ? (
               <SystemMonitor />
-            ) : (
+            ) : dashboardTab === 'breach' ? (
               <CyberBreach 
                 onUnlockToxicTheme={() => setIsToxicUnlocked(true)} 
                 soundEnabled={soundEnabled} 
+              />
+            ) : (
+              <WeatherDaemon 
+                weatherCity={weatherCity} 
+                onCitySearch={setWeatherCity} 
               />
             )}
           </div>

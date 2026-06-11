@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { getAIResponse } from '../utils/aiResponder';
+import { getWeatherAscii, getSimulatedWeather } from '../utils/weatherUtils';
 
 // Lofi music playlist data
 const MUSIC_PLAYLIST = [
@@ -130,6 +131,9 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger, setDashb
   // PulseAI Interactive Mode State
   const [aiMode, setAiMode] = useState(false);
   const [aiTyping, setAiTyping] = useState(false);
+
+  // Weather Daemon Telemetry State
+  const [weatherCity, setWeatherCity] = useState('Delhi');
 
 
   // Sound effects player
@@ -355,7 +359,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger, setDashb
     const args = parts.slice(1);
 
     switch (command) {
-      case 'help':
+  case 'help':
         addLine("Supported commands:", "system");
         addLine("  about       - Detailed biography and developer profile.", "normal");
         addLine("  skills      - Displays tech proficiency values visually.", "normal");
@@ -369,11 +373,54 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger, setDashb
         addLine("  music <opt> - Control Lofi Radio. Try: 'music list', 'music play', 'music pause'", "normal");
         addLine("  volume <val>- Set volume level (0-100).", "normal");
         addLine("  sysmon      - Launches interactive fullscreen system diagnostics monitor.", "normal");
+        addLine("  weather <c> - Fetch retro satellite weather telemetry. E.g., 'weather Delhi'", "normal");
         addLine("  hack        - Launch Cyber Breach visual interface in Right Panel.", "normal");
         addLine("  hack status - Display target node network permission levels.", "normal");
         addLine("  clear       - Wipes the console terminal history grid.", "normal");
         addLine("  neofetch    - Retro hardware and profile spec list.", "normal");
         break;
+
+      case 'weather': {
+        const targetCity = args.join(" ").trim() || "Delhi";
+        addLine(`📡 Accessing weather downlink satellite for [${targetCity.toUpperCase()}]...`, "system");
+        
+        if (setDashboardTab) setDashboardTab('weather');
+        setWeatherCity(targetCity);
+        
+        const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY || "fdc6799c537b6effb3255b30e3f102c3";
+        
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(targetCity)}&appid=${apiKey}&units=metric`)
+          .then(res => {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(data => {
+            const asciiLines = getWeatherAscii(
+              data.weather[0].main,
+              data.main.temp,
+              data.main.feels_like,
+              data.wind.speed,
+              data.main.humidity,
+              data.weather[0].description
+            );
+            addLine(`🌍 Downlink established for ${data.name}, ${data.sys.country}:`, "title");
+            asciiLines.forEach(line => addLine(line, "success"));
+          })
+          .catch(err => {
+            const simulated = getSimulatedWeather(targetCity);
+            const asciiLines = getWeatherAscii(
+              simulated.weather[0].main,
+              simulated.main.temp,
+              simulated.main.feels_like,
+              simulated.wind.speed,
+              simulated.main.humidity,
+              simulated.weather[0].description
+            );
+            addLine(`⚠️ Live downlink failed. Using emulated telemetry database for ${simulated.name}:`, "error");
+            asciiLines.forEach(line => addLine(line, "success"));
+          });
+        break;
+      }
 
       case 'sysmon':
       case 'monitor':
@@ -654,7 +701,7 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger, setDashb
         addLine(`⚠️ Command not found: '${command}'. Type 'help' for available instructions.`, "error");
     }
 
-  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, sysmonActive, setSysmonActive, aiMode, simulateTyping, isPlaying, currentTrack, audioVolume, playTrack, pauseTrack, nextTrack, prevTrack, changeVolume, setDashboardTab]);
+  }, [contactForm, addLine, clearHistory, playTypeSound, setActiveTheme, onNodeTrigger, soundEnabled, setGameActive, sysmonActive, setSysmonActive, aiMode, simulateTyping, isPlaying, currentTrack, audioVolume, playTrack, pauseTrack, nextTrack, prevTrack, changeVolume, setDashboardTab, setWeatherCity]);
 
   return {
     history,
@@ -670,6 +717,8 @@ export function useTerminal(activeTheme, setActiveTheme, onNodeTrigger, setDashb
     sysmonActive,
     setSysmonActive,
     soundEnabled,
+    weatherCity,
+    setWeatherCity,
     
     // Audio Player integrations
     audioElement: audioRef.current,
