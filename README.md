@@ -102,6 +102,12 @@ Switch visual layouts instantly using either the top GUI selector or by running 
 * **Workstation Customizations**: Successfully hacking Node 3 registers and unlocks the brand-new glowing **Toxic Neon** environment skin.
 * **Integrated CLI Controls**: Syncs right-hand layout tab automatically by typing `hack` or check network permissions using the `hack status` shell utility.
 
+### 🌤️ Weather Satellite Telemetry Daemon (`weather`)
+* **Real-time API Downlink**: Connects to the **OpenWeatherMap API** to stream live telemetry metrics (core temperature, wind speed, humidity, and barometric pressure).
+* **Dynamic Weather Animations**: Interactive custom SVGs render animated weather states (e.g., rotating neon sun, drifting cloud layers, and falling rain animations).
+* **Monospace ASCII Weather Art**: Displays clean retro weather drawings dynamically depending on live telemetry (clear sky, stormy rain, mist/fog, snowfall).
+* **CLI/GUI Sync**: Search locations either by typing directly in the deck input or run `weather <city>` in the command prompt.
+
 ---
 
 
@@ -125,6 +131,7 @@ Typing `help` in the terminal details all supported interactive shell commands:
 | `music` | `music play <track>` or `music pause` or `music list` | Controls the built-in Lofi Music Station playback and track selection. |
 | `volume` | `volume <0-100>` | Adjusts the music player volume to the specified percentage. |
 | `sysmon` | `sysmon` or `monitor` or `status` | Launches the interactive fullscreen system diagnostics monitor utility. |
+| `weather` | `weather <city>` | Downloads retro satellite weather telemetry report and ASCII graphic representation. |
 | `hack` | `hack` | Switches the visual dashboard view to the Cyber Breach node graph. |
 | `hack status` | `hack status` | Renders a table of target IPs, node permissions, and vulnerability statuses in the terminal history. |
 | `neofetch` | `neofetch` | Outputs classic retro hardware system specs, React core, and OS status. |
@@ -153,8 +160,9 @@ npm install
 Create a `.env` file in the root directory to store your API credentials:
 ```env
 VITE_WEB3FORMS_KEY=your-web3forms-access-key-here
+VITE_OPENWEATHER_API_KEY=your-openweathermap-api-key-here
 ```
-*(If left empty, a fallback submission key is provided to ensure contact flow validation works out-of-the-box.)*
+*(If left empty, fallbacks are provided: Web3Forms fallback submission works out-of-the-box, and a procedural simulated telemetry database is emulated for the weather deck.)*
 
 ### 4. Launch the local dev server
 ```bash
@@ -187,10 +195,14 @@ devpulse/
 │   │   │   ├── LofiPlayer.jsx       # Lofi Music Station GUI player & visualizer
 │   │   │   ├── SystemMonitor.jsx    # GUI Real-time diagnostics panels & graph
 │   │   │   ├── NodeTree.jsx         # HTML5 Canvas physics bubble graph
-│   │   │   └── CyberBreach.jsx      # Cyber Breach Sandbox & Fallout Decryption Game
+│   │   │   ├── CyberBreach.jsx      # Cyber Breach Sandbox & Fallout Decryption Game
+│   │   │   └── WeatherDaemon.jsx    # Weather Satellite Telemetry Monitor widget
 │   │   └── ThemeSelector.jsx        # GUI theme button container
 │   ├── hooks/
 │   │   └── useTerminal.js           # CLI State machine & command processors
+│   ├── utils/
+│   │   ├── aiResponder.js           # Local conversational database patterns
+│   │   └── weatherUtils.js          # Weather ASCII art utilities & emulated fallback DB
 │   ├── App.jsx                      # Main workspace grid & backgrounds
 │   ├── App.css
 │   ├── index.css                    # Tailwind CSS v4 setup & theme variables
